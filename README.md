@@ -53,6 +53,7 @@ task-management-api/
 ├── .gitignore
 ├── .env.example
 └── README.md
+```
 
 ## Module Responsibilities
 
