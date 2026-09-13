@@ -1,0 +1,18 @@
+[project]
+name = "customer-churn-detection"
+version = "0.1.0"
+description = "Environment foundation for a customer churn detection machine learning project"
+requires-python = ">=3.13,<3.14"
+
+dependencies = [
+    "numpy==2.3.3",
+    "pandas==2.3.2",
+    "scikit-learn==1.7.1",
+    "matplotlib==3.10.6",
+    "jupyter==1.1.1",
+    "pytest==9.1.1"
+]
+
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
