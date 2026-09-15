@@ -35,3 +35,25 @@ pip install -e .
 ## Status
 
 Project environment and repository foundation completed.
+
+## Day 2: Iterators, Generators, and Memory-Efficient Data Handling
+
+The project includes a custom CSV iterator and generator for processing customer data in batches.
+
+Instead of loading all CSV files and records into memory at once, the implementation reads files lazily and returns one batch at a time.
+
+### Concepts Used
+
+- `__iter__()` and `__next__()` for building a custom iterator.
+- `yield` for creating a generator.
+- Lazy evaluation for processing data only when requested.
+- `os.scandir()` for efficient file iteration.
+- `csv.DictReader` for reading CSV records.
+- `tracemalloc` for measuring memory usage.
+
+### Run the Memory Benchmark
+
+From the `customer_churn` folder, run:
+
+```powershell
+python -m scripts.memory_benchmark
