@@ -1,61 +1,146 @@
-# Triton Internship
+Day 3: OOP for Pipelines
 
-## Day 2: Iterators, Generators & Memory-Efficient Data Handling
+Objective
 
-This branch contains the implementation for Day 2 of the Triton internship.
+Learn how Object-Oriented Programming (OOP) can be used to design
+modular and maintainable data processing pipelines.
 
-The task focuses on processing large amounts of customer data efficiently without loading the entire dataset into memory.
+Topics covered:
 
-### Project
+Abstract Base Classes
 
-Customer Churn Detection
+Inheritance
 
-### Objective
+Polymorphism
 
-Build a custom data-loading mechanism that:
+Composition
 
-- Reads CSV files from a folder.
-- Processes records in batches.
-- Uses lazy evaluation.
-- Avoids storing the complete dataset in memory.
-- Measures memory usage as the dataset size increases.
+Reusable pipeline steps
 
-### Concepts Covered
+Unit testing
 
-- Iterators
-- `__iter__()`
-- `__next__()`
-- Generators
-- `yield`
-- Lazy evaluation
-- Eager evaluation
-- `os.scandir()`
-- `itertools`
-- Memory measurement using `tracemalloc`
+Project Overview
 
-### Implementation
+A customer churn detection pipeline was created using multiple
+independent processing steps.
 
-The project contains two data-loading approaches:
+Each step performs one specific task, and the Pipeline class combines
+these steps into a complete workflow.
 
-1. `CSVDatasetIterator`
-   - A custom iterator class.
-   - Implements `__iter__()` and `__next__()`.
-   - Returns one batch of customer records at a time.
+The workflow is:
 
-2. `csv_dataset_generator()`
-   - A generator function.
-   - Uses `yield` to pause and resume execution.
-   - Reads and returns records lazily in batches.
+Input Data
+    |
+    v
+Validation
+    |
+    v
+Remove Missing Values
+    |
+    v
+Feature Engineering
+    |
+    v
+Processed Data
 
-### Memory Benchmark
+Concepts Implemented
 
-The benchmark compares memory usage for datasets containing:
+1. Abstract Base Class
 
-- 100 CSV files
-- 1,000 CSV files
-- 10,000 CSV files
+The Step class defines a common interface for all pipeline steps.
 
-Run the benchmark from inside the `customer_churn` folder:
+class Step(ABC):
+    @abstractmethod
+    def run(self, data):
+        pass
 
-```powershell
-python -m scripts.memory_benchmark
+Every child class must implement the run() method.
+
+2. Inheritance
+
+The individual pipeline steps inherit from the common Step class.
+
+Examples:
+
+LoadDataStep
+
+ValidateDataStep
+
+RemoveMissingValuesStep
+
+FeatureEngineeringStep
+
+3. Polymorphism
+
+The pipeline calls:
+
+step.run(data)
+
+without needing to know which specific step is being executed.
+
+Each step provides its own implementation of run().
+
+4. Composition
+
+The Pipeline class contains a collection of independent steps.
+
+pipeline = Pipeline(
+    [
+        ValidateDataStep(),
+        RemoveMissingValuesStep(),
+        FeatureEngineeringStep(),
+    ]
+)
+
+This allows steps to be combined, reordered, or replaced easily.
+
+Pipeline Steps
+
+Step                        Responsibility
+
+LoadDataStep              Provides the initial data
+ValidateDataStep          Checks required fields
+RemoveMissingValuesStep   Removes incomplete records
+FeatureEngineeringStep    Creates the customer_value feature
+
+Example Feature
+
+The feature engineering step calculates:
+
+customer_value = tenure × monthly_charges
+
+For example:
+
+tenure = 12
+monthly_charges = 65.5
+
+customer_value = 12 × 65.5 = 786.0
+
+Testing
+
+Run the test suite using:
+
+python -m pytest -q
+
+Expected result:
+
+4 passed
+
+Running the Demo
+
+Run:
+
+python -m scripts.demo_pipeline
+
+The demo shows:
+
+Validation and feature engineering.
+
+Missing-value removal followed by feature engineering.
+
+Key Learning Outcome
+
+This task demonstrates how composition can be used to build flexible
+pipelines without creating deep inheritance hierarchies. Each processing
+step has a single responsibility and can be independently tested and
+reused.
