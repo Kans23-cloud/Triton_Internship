@@ -1,146 +1,42 @@
-Day 3: OOP for Pipelines
+# Customer Churn Detection
 
-Objective
+## Day 4 - Type Hints & Pydantic Configuration
 
-Learn how Object-Oriented Programming (OOP) can be used to design
-modular and maintainable data processing pipelines.
+### Objective
 
-Topics covered:
+Build a validated configuration system using Python type hints, Enums, and Pydantic.
 
-Abstract Base Classes
+### What Was Implemented
 
-Inheritance
+- Added Python type hints for configuration fields.
+- Added `Enum` for `mode` and `device`.
+- Added Pydantic `BaseModel` for configuration validation.
+- Added strict validation for integer and float values.
+- Added validation for:
+  - Positive batch size
+  - Threshold between 0 and 1
+  - Non-empty feature columns
+  - Existing data file path
+  - Required fields
+  - Valid mode values
+  - Valid device values
+  - Incorrect data types
+- Added a default threshold value of `0.5`.
+- Added demonstration scripts for valid and invalid configurations.
+- Added automated pytest tests.
 
-Polymorphism
+### Configuration Example
 
-Composition
-
-Reusable pipeline steps
-
-Unit testing
-
-Project Overview
-
-A customer churn detection pipeline was created using multiple
-independent processing steps.
-
-Each step performs one specific task, and the Pipeline class combines
-these steps into a complete workflow.
-
-The workflow is:
-
-Input Data
-    |
-    v
-Validation
-    |
-    v
-Remove Missing Values
-    |
-    v
-Feature Engineering
-    |
-    v
-Processed Data
-
-Concepts Implemented
-
-1. Abstract Base Class
-
-The Step class defines a common interface for all pipeline steps.
-
-class Step(ABC):
-    @abstractmethod
-    def run(self, data):
-        pass
-
-Every child class must implement the run() method.
-
-2. Inheritance
-
-The individual pipeline steps inherit from the common Step class.
-
-Examples:
-
-LoadDataStep
-
-ValidateDataStep
-
-RemoveMissingValuesStep
-
-FeatureEngineeringStep
-
-3. Polymorphism
-
-The pipeline calls:
-
-step.run(data)
-
-without needing to know which specific step is being executed.
-
-Each step provides its own implementation of run().
-
-4. Composition
-
-The Pipeline class contains a collection of independent steps.
-
-pipeline = Pipeline(
-    [
-        ValidateDataStep(),
-        RemoveMissingValuesStep(),
-        FeatureEngineeringStep(),
-    ]
+```python
+ChurnConfig(
+    data_path="data/raw/customers.csv",
+    batch_size=32,
+    feature_columns=[
+        "tenure",
+        "monthly_charges",
+        "customer_value",
+    ],
+    mode="train",
+    device="cpu",
+    threshold=0.5,
 )
-
-This allows steps to be combined, reordered, or replaced easily.
-
-Pipeline Steps
-
-Step                        Responsibility
-
-LoadDataStep              Provides the initial data
-ValidateDataStep          Checks required fields
-RemoveMissingValuesStep   Removes incomplete records
-FeatureEngineeringStep    Creates the customer_value feature
-
-Example Feature
-
-The feature engineering step calculates:
-
-customer_value = tenure × monthly_charges
-
-For example:
-
-tenure = 12
-monthly_charges = 65.5
-
-customer_value = 12 × 65.5 = 786.0
-
-Testing
-
-Run the test suite using:
-
-python -m pytest -q
-
-Expected result:
-
-4 passed
-
-Running the Demo
-
-Run:
-
-python -m scripts.demo_pipeline
-
-The demo shows:
-
-Validation and feature engineering.
-
-Missing-value removal followed by feature engineering.
-
-Key Learning Outcome
-
-This task demonstrates how composition can be used to build flexible
-pipelines without creating deep inheritance hierarchies. Each processing
-step has a single responsibility and can be independently tested and
-reused.
