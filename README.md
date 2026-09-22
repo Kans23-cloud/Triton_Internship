@@ -1,42 +1,25 @@
-# Customer Churn Detection
+## Day 5 — Decorators, Context Managers & Caching
 
-## Day 4 - Type Hints & Pydantic Configuration
+### Topics Covered
 
-### Objective
+- Custom decorators
+- `functools.wraps`
+- Decorators with arguments
+- Retry logic
+- Context managers
+- `__enter__` and `__exit__`
+- `contextlib.contextmanager`
+- `functools.lru_cache`
+- Cache hits and misses
+- Risks of mutable cached results and unbounded caching
 
-Build a validated configuration system using Python type hints, Enums, and Pydantic.
+### Implemented
 
-### What Was Implemented
+#### 1. `@timeit`
 
-- Added Python type hints for configuration fields.
-- Added `Enum` for `mode` and `device`.
-- Added Pydantic `BaseModel` for configuration validation.
-- Added strict validation for integer and float values.
-- Added validation for:
-  - Positive batch size
-  - Threshold between 0 and 1
-  - Non-empty feature columns
-  - Existing data file path
-  - Required fields
-  - Valid mode values
-  - Valid device values
-  - Incorrect data types
-- Added a default threshold value of `0.5`.
-- Added demonstration scripts for valid and invalid configurations.
-- Added automated pytest tests.
+Measures and prints the execution time of a function.
 
-### Configuration Example
+Applied to:
 
 ```python
-ChurnConfig(
-    data_path="data/raw/customers.csv",
-    batch_size=32,
-    feature_columns=[
-        "tenure",
-        "monthly_charges",
-        "customer_value",
-    ],
-    mode="train",
-    device="cpu",
-    threshold=0.5,
-)
+Pipeline.run()
