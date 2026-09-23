@@ -2,6 +2,7 @@ from enum import Enum
 from pathlib import Path
 
 from pydantic import BaseModel, StrictFloat, StrictInt, Field, field_validator
+from src.customer_churn_detection.exceptions import ConfigError
 
 
 class Mode(str, Enum):
@@ -43,7 +44,8 @@ class ChurnConfig(BaseModel):
 
         if not path.is_file():
             raise ValueError(
-                f"data_path does not exist or is not a file: {value}"
+                f"Configuration failed at ChurnConfig.data_path: "
+                f"file does not exist or is not a file: {value}"
             )
 
         return value

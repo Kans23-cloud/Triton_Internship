@@ -1,71 +1,61 @@
-## Day 5 — Decorators, Context Managers & Caching
+## Day 6 — Exception Hierarchies & Error Design
 
 ### Topics Covered
 
-- Custom decorators
-- `functools.wraps`
-- Decorators with arguments
-- Retry logic
-- Context managers
-- `__enter__` and `__exit__`
-- `contextlib.contextmanager`
-- `functools.lru_cache`
-- Cache hits and misses
-- Risks of mutable cached results and unbounded caching
+- Python exception hierarchy
+- Custom exception classes
+- Exception chaining with `raise ... from`
+- `try`, `except`, `else`, and `finally`
+- Specific exception handling
+- Error propagation between layers
+- Why broad `except Exception` should be avoided
 
 ### Implemented
 
-#### 1. `@timeit`
+Created a project-specific exception hierarchy:
 
-Measures and prints the execution time of a function.
+```text
+ChurnPipelineError
+├── DataValidationError
+├── ConfigError
+├── ProcessingError
+└── DataLoadingError
+Pipeline Error Handling
+ValidateDataStep raises DataValidationError
+FeatureEngineeringStep raises ProcessingError
+LoadDataStep raises DataLoadingError
+Low-level errors are preserved using exception chaining
+Top-level code catches ChurnPipelineError and reports the failure
 
-Applied to:
+Example:
 
-```python
-Pipeline.run()
+raise ProcessingError(
+    "Feature engineering failed at record 0: "
+    "could not calculate customer_value because "
+    "required numeric values are invalid"
+) from error
 
-2. @retry(max_attempts=N)
-
-Automatically retries a function when it raises an exception.
-
-Applied to:
-
-LoadDataStep.load_file()
-3. managed_file
-
-A context manager that safely opens and closes files, including when an exception occurs.
-
-Used by:
-
-LoadDataStep.load_file()
-4. lru_cache
-
-Demonstrated caching using:
-
-@lru_cache(maxsize=3)
-
-Repeated calls with the same arguments are served from the cache instead of executing the function again.
+This preserves the original exception while providing a meaningful application-level error.
 
 Validation
 
-All Day 5 tests passed successfully.
+Day 6 tests:
 
-The caching demonstration produced:
+21 passed
 
-CacheInfo(hits=1, misses=2, maxsize=3, currsize=2)
+Failure scenarios were tested for:
 
-This confirms that repeated function calls can be served from the cache.
+Data validation
+Data processing
+Data loading
+Exception hierarchy
+Exception chaining
 
-Files Added
-src/customer_churn_detection/decorators.py
-src/customer_churn_detection/context_managers.py
-tests/test_day5.py
-scripts/demo_cache.py
-Files Updated
-src/customer_churn_detection/pipeline.py
-src/customer_churn_detection/steps/load_data.py
+---
 
-After saving, run:
+## Step 9: Check everything
+
+Run:
 
 ```powershell
-python -m pytest -q
+git status

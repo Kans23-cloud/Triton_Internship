@@ -1,4 +1,6 @@
 from .base import Step
+from ..exceptions import DataValidationError
+
 
 class ValidateDataStep(Step):
     REQUIRED_FIELDS = {
@@ -10,14 +12,24 @@ class ValidateDataStep(Step):
 
     def run(self, data):
         if not isinstance(data, list):
-            raise TypeError("Pipeline data must be a list of records")
+            raise DataValidationError(
+                "Data validation failed at ValidateDataStep: "
+                "expected a list of customer records"
+            )
 
-        for record in data:
+        for index, record in enumerate(data):
+            if not isinstance(record, dict):
+                raise DataValidationError(
+                    f"Data validation failed at record {index}: "
+                    f"expected a dictionary, got {type(record).__name__}"
+                )
+
             missing_fields = self.REQUIRED_FIELDS - record.keys()
 
             if missing_fields:
-                raise ValueError(
-                    f"Missing required fields: {sorted(missing_fields)}"
+                raise DataValidationError(
+                    f"Data validation failed at record {index}: "
+                    f"missing required fields {sorted(missing_fields)}"
                 )
 
         return data
