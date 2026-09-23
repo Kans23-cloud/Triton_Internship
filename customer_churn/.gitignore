@@ -18,6 +18,7 @@ env/
 data/raw/*
 data/processed/*
 data/external/*
+logs/pipeline.log
 
 # Keep folder structure
 !data/raw/.gitkeep
@@ -37,7 +38,7 @@ models/*
 *.egg-info/
 
 # Experiment outputs
-logs/
+logs/pipeline.log
 outputs/
 mlruns/
 

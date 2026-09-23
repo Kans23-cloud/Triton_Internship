@@ -1,59 +1,61 @@
-## Day 6 — Exception Hierarchies & Error Design
+## Day 7 — Structured Logging & Production Debugging
 
 ### Topics Covered
 
-- Python exception hierarchy
-- Custom exception classes
-- Exception chaining with `raise ... from`
-- `try`, `except`, `else`, and `finally`
-- Specific exception handling
-- Error propagation between layers
-- Why broad `except Exception` should be avoided
+- Python `logging` module
+- Loggers, handlers and formatters
+- Centralized logging configuration
+- Structured JSON logging
+- Log levels
+- Exception logging with `logger.exception()`
+- Development and production logging concepts
+- Replacing `print()` with structured logs
 
 ### Implemented
 
-Created a project-specific exception hierarchy:
+Created centralized logging configuration in:
 
 ```text
-ChurnPipelineError
-├── DataValidationError
-├── ConfigError
-├── ProcessingError
-└── DataLoadingError
-Pipeline Error Handling
-ValidateDataStep raises DataValidationError
-FeatureEngineeringStep raises ProcessingError
-LoadDataStep raises DataLoadingError
-Low-level errors are preserved using exception chaining
-Top-level code catches ChurnPipelineError and reports the failure
+src/customer_churn_detection/logging_config.py
 
-Example:
+The pipeline now records:
 
-raise ProcessingError(
-    "Feature engineering failed at record 0: "
-    "could not calculate customer_value because "
-    "required numeric values are invalid"
-) from error
+Pipeline start and completion
+Pipeline steps
+Number of records processed
+Step duration
+Pipeline duration
+Errors and complete tracebacks
 
-This preserves the original exception while providing a meaningful application-level error.
+Logs are written in JSON format to:
 
+logs/pipeline.log
+
+A sample run containing both successful and deliberately failed execution is preserved as:
+
+logs/day7_sample_run.log
+Error Logging
+
+Pipeline failures are recorded using logger.exception(), preserving the complete traceback and the original chained exception.
+
+Example failure information includes:
+
+FeatureEngineeringStep
+ProcessingError
+Original TypeError
 Validation
 
-Day 6 tests:
+The pipeline was executed with:
 
-21 passed
+A successful dataset
+A deliberately invalid dataset
 
-Failure scenarios were tested for:
+The failed run was recorded with its complete traceback.
 
-Data validation
-Data processing
-Data loading
-Exception hierarchy
-Exception chaining
+The production pipeline uses logging instead of print().
 
----
 
-## Step 9: Check everything
+## Step 16: Final Git check
 
 Run:
 

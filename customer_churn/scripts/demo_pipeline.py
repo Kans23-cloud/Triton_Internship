@@ -3,7 +3,9 @@ from src.customer_churn_detection.steps.feature_engineering import (FeatureEngin
 from src.customer_churn_detection.steps.load_data import LoadDataStep
 from src.customer_churn_detection.steps.remove_missing_values import (RemoveMissingValuesStep,)
 from src.customer_churn_detection.steps.validate_data import ValidateDataStep
+from src.customer_churn_detection.logging_config import configure_logging
 
+configure_logging()
 data = [
     {
         "customer_id": "C001",
