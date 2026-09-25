@@ -1,5 +1,6 @@
 from .base import Step
 
+
 class RemoveMissingValuesStep(Step):
     def run(self, data):
         return [
